@@ -1,4 +1,5 @@
 # ignore following folders
+.vs/
 build/
 
 # Prerequisites

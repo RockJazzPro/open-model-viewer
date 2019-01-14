@@ -35,7 +35,6 @@ int main() {
   //set first viewport
   glViewport(0, 0, WIDTH, HEIGHT);
 
-  std::cout << "Hello World" << std::endl;
   // render
   while (!glfwWindowShouldClose(window)) {
     processInput(window);

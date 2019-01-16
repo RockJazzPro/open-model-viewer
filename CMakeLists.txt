@@ -21,9 +21,16 @@ set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 # compile glfw
 add_subdirectory(external/glfw-3.2.1)
 
+#Search source files
+file(GLOB SOURCE
+  "src/*.cpp"
+  "src/*.vs"
+  "src/*.fs"
+  "src/*.h"
+)
 # add source files
 add_executable(open-model-viewer
-  src/main.cpp
+  ${SOURCE}
   src/glad.c
 )
 

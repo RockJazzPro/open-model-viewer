@@ -1,12 +1,11 @@
 #include "shader.h"
-
-#include <sstream>
 #include <fstream>
+#include <sstream>
 #include <iostream>
 #include <string>
 
 // create shaders
-Shader::Shader(const char* vertexFilePath, const char*fragmentFilePath) {
+Shader::Shader(const char* vertexFilePath, const char* fragmentFilePath) {
   std::string vertexCode;
   std::string fragmentCode;
   std::ifstream vertexShaderFile;
@@ -19,7 +18,7 @@ Shader::Shader(const char* vertexFilePath, const char*fragmentFilePath) {
   try {
     // open files
     vertexShaderFile.open(vertexFilePath);
-    vertexShaderFile.open(fragmentFilePath);
+    fragmentShaderFile.open(fragmentFilePath);
     std::stringstream vertexShaderStream, fragmentShaderStream;
 
     vertexShaderStream << vertexShaderFile.rdbuf();
@@ -115,6 +114,7 @@ void Shader::checkCompileErrors(GLuint id, std::string type) {
     if (!success) {
       glGetShaderInfoLog(id, 1024, NULL, infoLog);
       std::cout << "shader compilation error of type: " << type << "\n" << infoLog << std::endl;
+    }
   }
   else {
     glGetProgramiv(id, GL_COMPILE_STATUS, &success);

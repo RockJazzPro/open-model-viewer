@@ -44,3 +44,22 @@ include_directories(
   ${CMAKE_SOURCE_DIR}/includes
   external/glfw-3.2.1/include
 )
+
+file(GLOB SHADERS
+  "src/*.fs"
+  "src/*.vs"
+)
+
+set(NAME "open-model-viewer")
+foreach(SHADER ${SHADERS})
+            if(WIN32)
+                # configure_file(${SHADER} "test")
+                add_custom_command(TARGET ${NAME} PRE_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${SHADER} $<TARGET_FILE_DIR:${NAME}>)
+            elseif(UNIX AND NOT APPLE)
+                file(COPY ${SHADER} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/bin/${CHAPTER})
+            elseif(APPLE)
+                # create symbolic link for *.vs *.fs *.gs
+                get_filename_component(SHADERNAME ${SHADER} NAME)
+                makeLink(${SHADER} ${CMAKE_CURRENT_BINARY_DIR}/bin/${CHAPTER}/${SHADERNAME} ${NAME})
+            endif(WIN32)
+endforeach(SHADER)

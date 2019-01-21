@@ -5,16 +5,19 @@
 #include <iostream>
 #include <string>
 
+// create shaders
 Shader::Shader(const char* vertexFilePath, const char*fragmentFilePath) {
   std::string vertexCode;
   std::string fragmentCode;
   std::ifstream vertexShaderFile;
   std::ifstream fragmentShaderFile;
 
+  // check if objects can throw exceptions
   vertexShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
   fragmentShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
 
   try {
+    // open files
     vertexShaderFile.open(vertexFilePath);
     vertexShaderFile.open(fragmentFilePath);
     std::stringstream vertexShaderStream, fragmentShaderStream;
@@ -32,31 +35,37 @@ Shader::Shader(const char* vertexFilePath, const char*fragmentFilePath) {
     std::cout << "shader file not found" << std::endl;
   }
 
-  const char * vertexShaderCode = vertexCode.c_str();
-  const char * fragmentShaderCode = fragmentCode.c_str();
+  const char* vertexShaderCode = vertexCode.c_str();
+  const char* fragmentShaderCode = fragmentCode.c_str();
 
+  // compile shaders
+  // vertex shader
   unsigned int vertex;
   vertex = glCreateShader(GL_VERTEX_SHADER);
   glShaderSource(vertex, 1, &vertexShaderCode, NULL);
   glCompileShader(vertex);
   checkCompileErrors(vertex, "VERTEX");
 
+  // fragment shader
   unsigned int fragment;
   fragment = glCreateShader(GL_FRAGMENT_SHADER);
   glShaderSource(fragment, 1, &fragmentShaderCode, NULL);
   glCompileShader(fragment);
   checkCompileErrors(fragment, "FRAGMENT");
 
+  // create shader program
   progID = glCreateProgram();
   glAttachShader(progID, vertex);
   glAttachShader(progID, fragment);
   glLinkProgram(progID);
   checkCompileErrors(progID, "PROGRAM");
 
+  // delete shader
   glDeleteShader(vertex);
   glDeleteShader(fragment);
 }
 
+// activate the shader
 void Shader::use() {
   glUseProgram(progID);
 }
@@ -97,6 +106,7 @@ void Shader::setMat2(const std::string &name, glm::mat2 &mat) {
   glUniformMatrix2fv(glGetUniformLocation(progID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
 }
 
+// check if there is a compile error
 void Shader::checkCompileErrors(GLuint id, std::string type) {
   int success;
   char infoLog[1024];

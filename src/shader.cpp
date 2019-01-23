@@ -2,7 +2,6 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
-#include <string>
 
 // create shaders
 Shader::Shader(std::string vertexFilePath, std::string fragmentFilePath) {

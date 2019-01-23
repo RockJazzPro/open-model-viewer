@@ -19,7 +19,7 @@ set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 
 # compile glfw
-add_subdirectory(external/glfw-3.2.1)
+add_subdirectory(external/glfw)
 
 #Search source files
 file(GLOB SOURCE
@@ -42,7 +42,7 @@ target_link_libraries(open-model-viewer
 # include headerfiles
 include_directories(
   ${CMAKE_SOURCE_DIR}/includes
-  external/glfw-3.2.1/include
+  external/glfw/include
 )
 
 file(GLOB SHADERS

@@ -101,7 +101,7 @@ int main() {
   myShader.use();
   glm::mat4 projection = glm::mat4(1.0f);
   projection = glm::perspective(glm::radians(45.0f), (float)WIDTH / (float)HEIGHT, 0.1f, 100.0f);
-  myShader.setMat4("projection", projection);
+  myShader.setUniform("projection", projection);
 
   // render
   while (!glfwWindowShouldClose(window)) {
@@ -119,9 +119,8 @@ int main() {
 
     model = glm::rotate(model, (float)glfwGetTime()*2.5f, glm::vec3(0.0f, 1.0f, 0.0f));
     view = glm::translate(view, glm::vec3(0.0f, 0.0f, -5.0f));
-    // myShader.setMat4("model", model);
     glUniformMatrix4fv(glGetUniformLocation(myShader.progID, "model"), 1, GL_FALSE, glm::value_ptr(model));
-    myShader.setMat4("view", view);
+    myShader.setUniform("view", view);
 
     // render container
     glBindVertexArray(VAO);

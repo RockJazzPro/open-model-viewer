@@ -5,7 +5,7 @@
 #include <string>
 
 // create shaders
-Shader::Shader(const char* vertexFilePath, const char* fragmentFilePath) {
+Shader::Shader(std::string vertexFilePath, std::string fragmentFilePath) {
   std::string vertexCode;
   std::string fragmentCode;
   std::ifstream vertexShaderFile;

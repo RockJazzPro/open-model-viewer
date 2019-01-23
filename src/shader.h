@@ -9,7 +9,7 @@ class Shader {
 public:
   unsigned int progID;
   
-  Shader(const char* vertexFilePath, const char* fragmentFilePath);
+  Shader(std::string vertexFilePath, std::string fragmentFilePath);
   void use();
   void setBool(const std::string &name, bool value);
   void setInt(const std::string &name, int value);

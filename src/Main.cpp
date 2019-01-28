@@ -5,12 +5,22 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <iostream>
 #include "shader.h"
+#include "camera.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void processInput(GLFWwindow * window);
 
 const unsigned int WIDTH = 1000;
 const unsigned int HEIGHT = 700;
+
+Camera cam(0.0f, 0.0f, 3.0f, -90.0f, 0.0f, 5.0f, 0.05f);
+float lastX = WIDTH / 2;
+float lastY = HEIGHT / 2;
+bool firstMouse = true;
+
+float deltaTime = 0.0f;
+float lastFrame = 0.0f;
 
 int main() {
   // initialization and configuration of glfw
@@ -28,6 +38,10 @@ int main() {
   }
   glfwMakeContextCurrent(window);
   glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+
+  // set mouse callback
+  glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+  glfwSetCursorPosCallback(window, mouse_callback);
 
   // load all OpenGL functions
   if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
@@ -107,6 +121,11 @@ int main() {
   while (!glfwWindowShouldClose(window)) {
     processInput(window);
 
+    // time management
+    float currentTime = (float) glfwGetTime();
+    deltaTime = currentTime - lastFrame;
+    lastFrame = currentTime;
+
     // Background
     glClearColor(.1f, .1, .1f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -115,10 +134,9 @@ int main() {
 
     // create transformations
     glm::mat4 model = glm::mat4(1.0f);
-    glm::mat4 view = glm::mat4(1.0f);
+    glm::mat4 view = cam.getView();
 
     model = glm::rotate(model, (float)glfwGetTime()*2.5f, glm::vec3(0.0f, 1.0f, 0.0f));
-    view = glm::translate(view, glm::vec3(0.0f, 0.0f, -5.0f));
     glUniformMatrix4fv(glGetUniformLocation(myShader.progID, "model"), 1, GL_FALSE, glm::value_ptr(model));
     myShader.setUniform("view", view);
 
@@ -137,8 +155,36 @@ int main() {
 void processInput(GLFWwindow *window) {
   if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
     glfwSetWindowShouldClose(window, true);
+
+  // camera movement
+  if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+    cam.handleKeyboard(FOR, deltaTime);
+  if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+    cam.handleKeyboard(BACK, deltaTime);
+  if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+    cam.handleKeyboard(LEFT, deltaTime);
+  if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+    cam.handleKeyboard(RIGHT, deltaTime);
 }
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
   glViewport(0, 0, width, height);
+}
+
+void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
+  // if mouse enters the window the first time
+  if (firstMouse) {
+    lastX = xpos;
+    lastY = ypos;
+    firstMouse = false;
+  }
+
+  // transform mouse coordinates
+  float xoffset = xpos - lastX;
+  float yoffset = lastY - ypos;
+
+  lastX = xpos;
+  lastY = ypos;
+
+  cam.handleMouse(xoffset, yoffset);
 }

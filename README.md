@@ -1,7 +1,7 @@
-# Feature F2 | Basic OpenGL context
-Created on: 21.01.2019  
+# Feature F3 | User interaction
+Created on: 23.01.2019  
 State: **finished**
 
 ## Description
-The "basic OpenGL context" features includes an example context with shaders and one object.
-The main goal of this feature is to provide a shader class and an example structure.
+The "User interaction" features includes an example context with shaders, one object and a camera.
+The main goal of this feature is to provide a method to move trough the context.

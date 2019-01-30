@@ -6,6 +6,7 @@
 #include <iostream>
 #include "shader.h"
 #include "camera.h"
+#include <assimp/Importer.hpp>
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);

@@ -21,6 +21,14 @@ set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 # compile glfw
 add_subdirectory(external/glfw)
 
+# assimp
+option(DIRECTX OFF)
+option(ASSIMP_BUILD_ASSIMP_TOOLS OFF)
+option(ASSIMP_BUILD_SAMPLES OFF)
+option(ASSIMP_BUILD_TESTS OFF)
+option(BUILD_SHARED_LIBS OFF)
+add_subdirectory(external/assimp)
+
 #Search source files
 file(GLOB SOURCE
   "src/*.cpp"
@@ -37,12 +45,14 @@ add_executable(open-model-viewer
 # link libraries
 target_link_libraries(open-model-viewer
   glfw
+  assimp
 )
 
 # include headerfiles
 include_directories(
   ${CMAKE_SOURCE_DIR}/includes
   external/glfw/include
+  external/assimp/include
 )
 
 file(GLOB SHADERS

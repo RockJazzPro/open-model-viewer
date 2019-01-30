@@ -15,6 +15,11 @@ enum Movement {
 
 class Camera {
 public:
+  Camera(float posX, float posY, float posZ, float yaw, float pitch, float speed, float sensitivity);
+  void handleKeyboard(Movement direction, float deltaTime);
+  void handleMouse(float xoffset, float yoffset);
+  glm::mat4 getView();
+private:
   glm::vec3 position;
   glm::vec3 front;
   glm::vec3 up;
@@ -25,11 +30,6 @@ public:
   float speed;
   float sensitivity;
 
-  Camera(float posX, float posY, float posZ, float yaw, float pitch, float speed, float sensitivity);
-  void handleKeyboard(Movement direction, float deltaTime);
-  void handleMouse(float xoffset, float yoffset);
-  glm::mat4 getView();
-private:
   void updateCamera();
 };
 #endif

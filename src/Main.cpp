@@ -27,6 +27,8 @@ bool firstMouse = true;
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
+bool wireframeMode = false;
+
 int main() {
   // initialization and configuration of glfw
   glfwInit();
@@ -117,7 +119,8 @@ void shortcut_callback(GLFWwindow* window, int key, int scancode, int action, in
 
   // enter wireframe mode if 'm' is pressed
   if (key == GLFW_KEY_M && action == GLFW_PRESS) {
-    std::cout << "wireframemode" << std::endl;
+    wireframeMode = !wireframeMode;
+    glPolygonMode(GL_FRONT_AND_BACK, wireframeMode ? GL_LINE : GL_FILL);
   }
 
   // import new object if ctrl + i is pressed

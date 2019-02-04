@@ -8,10 +8,12 @@
 #include "camera.h"
 #include "model.h"
 #include <assimp/Importer.hpp>
+#include <stb_image/stb_image_write.h>;
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void processInput(GLFWwindow * window);
+void exportImage(const std::string &name);
 
 const unsigned int WIDTH = 1000;
 const unsigned int HEIGHT = 700;
@@ -100,6 +102,12 @@ int main() {
     glfwPollEvents();
   }
 
+  // temp: write image on application close
+  std::string filename;
+  std::cout <<  "Enter a file name: ";
+  std::cin >> filename;
+  exportImage(filename);
+
   glfwTerminate();
   return 0;
 }
@@ -139,4 +147,16 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
   lastY = ypos;
 
   cam.handleMouse(xoffset, yoffset);
+}
+
+void exportImage(const std::string &name) {
+  // Buffer object with frame informations
+  GLubyte* buffer = new GLubyte[3 * WIDTH * HEIGHT];
+  glReadPixels(0, 0, WIDTH, HEIGHT, GL_RGB, GL_UNSIGNED_BYTE, buffer);
+
+  stbi_flip_vertically_on_write(1);
+  stbi_write_png(name.c_str(), WIDTH, HEIGHT, 3, buffer, WIDTH * 3);
+
+  // Delete the buffer data
+  delete[] buffer;
 }

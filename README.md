@@ -1,7 +1,7 @@
-# Feature F5 | Image Export
+# Feature F6 | Shortcuts
 Created on: 04.02.2019  
-State: **finished**
+State: **unfinished**
 
 ## Description
-The "Mode loading" features includes an example context with shaders, one model and a camera.
-The main goal of this feature to provide a feature to export an image of the current context.
+The "Shortcuts" feature includes an example context with shaders, one model and a camera.
+The main goal of this feature to provide a method to handle keyboard inputs of the user.

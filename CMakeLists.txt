@@ -60,6 +60,9 @@ file(GLOB SHADERS
   "src/*.vs"
 )
 
+# copy the resource folder
+file(COPY res DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+
 # copied from: github.com/JoeyDeVries/LearnOpenGL
 set(NAME "open-model-viewer")
 foreach(SHADER ${SHADERS})

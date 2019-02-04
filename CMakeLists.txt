@@ -40,6 +40,7 @@ file(GLOB SOURCE
 add_executable(open-model-viewer
   ${SOURCE}
   src/glad.c
+  src/tinyfiledialogs.c
 )
 
 # link libraries

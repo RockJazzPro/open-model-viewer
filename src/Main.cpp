@@ -12,7 +12,8 @@
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
-void processInput(GLFWwindow * window);
+void shortcut_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
+void processMovement(GLFWwindow * window);
 void exportImage(const std::string &name);
 
 const unsigned int WIDTH = 1000;
@@ -47,6 +48,9 @@ int main() {
   glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
   glfwSetCursorPosCallback(window, mouse_callback);
 
+  // set key callback
+  glfwSetKeyCallback(window, shortcut_callback);
+
   // load all OpenGL functions
   if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
     std::cout << "Failed to initialize glad" << std::endl;
@@ -73,7 +77,7 @@ int main() {
 
   // render
   while (!glfwWindowShouldClose(window)) {
-    processInput(window);
+    processMovement(window);
 
     // time management
     float currentTime = (float) glfwGetTime();
@@ -102,21 +106,32 @@ int main() {
     glfwPollEvents();
   }
 
-  // temp: write image on application close
-  std::string filename;
-  std::cout <<  "Enter a file name: ";
-  std::cin >> filename;
-  exportImage(filename);
-
   glfwTerminate();
   return 0;
 }
 
-void processInput(GLFWwindow *window) {
-  if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+void shortcut_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+  // exit application if escape is pressed
+  if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
     glfwSetWindowShouldClose(window, true);
 
-  // camera movement
+  // enter wireframe mode if 'm' is pressed
+  if (key == GLFW_KEY_M && action == GLFW_PRESS) {
+    std::cout << "wireframemode" << std::endl;
+  }
+
+  // import new object if ctrl + i is pressed
+  if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS && glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS && action == GLFW_PRESS) {
+    std::cout << "Import new model" << std::endl;
+  }
+
+  // export current frame as png
+  if (key == GLFW_KEY_E && action == GLFW_PRESS) {
+    std::cout << "export as image.." << std::endl;
+  }
+}
+
+void processMovement(GLFWwindow *window) {
   if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
     cam.handleKeyboard(FOR, deltaTime);
   if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)

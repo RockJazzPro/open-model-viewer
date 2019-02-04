@@ -9,6 +9,7 @@
 #include "model.h"
 #include <assimp/Importer.hpp>
 #include <stb_image/stb_image_write.h>;
+#include <tinyfiledialogs.h>
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
@@ -125,12 +126,14 @@ void shortcut_callback(GLFWwindow* window, int key, int scancode, int action, in
 
   // import new object if ctrl + i is pressed
   if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS && glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS && action == GLFW_PRESS) {
-    std::cout << "Import new model" << std::endl;
+    
   }
 
   // export current frame as png
   if (key == GLFW_KEY_E && action == GLFW_PRESS) {
-    std::cout << "export as image.." << std::endl;
+    const char* filterPatterns[1] = { "*.png" };
+    std::string filename = tinyfd_saveFileDialog("Choose a location", "open-model-viewer.png", 1, filterPatterns, NULL);
+    exportImage(filename);
   }
 }
 

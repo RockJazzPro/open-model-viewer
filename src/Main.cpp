@@ -6,6 +6,7 @@
 #include <iostream>
 #include "shader.h"
 #include "camera.h"
+#include "model.h"
 #include <assimp/Importer.hpp>
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
@@ -46,68 +47,18 @@ int main() {
 
   // load all OpenGL functions
   if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-    std::cout << "Faileld to initialize glad" << std::endl;
+    std::cout << "Failed to initialize glad" << std::endl;
     return -1;
   }
 
   //set first viewport
   glViewport(0, 0, WIDTH, HEIGHT);
 
-  // center object vertices
-  float vertices[] = {
-    // Coordinates         // Colors
-    -0.5f,  0.5f,  0.2f,   1.0f, 0.0f, 0.0f,
-     0.5f,  0.5f,  0.2f,   0.0f, 1.0f, 0.0f,
-     0.0f, -0.5f,  0.2f,   0.0f, 0.0f, 1.0f,
-
-    -0.5f,  0.5f, -0.2f,   0.0f, 0.0f, 1.0f,
-     0.5f,  0.5f, -0.2f,   0.0f, 1.0f, 0.0f,
-     0.0f, -0.5f, -0.2f,   1.0f, 0.0f, 0.0f,
-
-    -0.5f,  0.5f,  0.2f,   0.0f, 0.0f, 0.0f,
-     0.5f,  0.5f,  0.2f,   0.0f, 0.0f, 0.0f,
-     0.5f,  0.5f, -0.2f,   0.0f, 0.0f, 0.0f,
-
-    -0.5f,  0.5f, -0.2f,   0.0f, 0.0f, 0.0f,
-     0.5f,  0.5f, -0.2f,   0.0f, 0.0f, 0.0f,
-    -0.5f,  0.5f,  0.2f,   0.0f, 0.0f, 0.0f,
-
-     0.5f,  0.5f,  0.2f,   0.0f, 0.0f, 0.0f,
-     0.0f, -0.5f,  0.2f,   0.0f, 0.0f, 0.0f,
-     0.0f, -0.5f, -0.2f,   0.0f, 0.0f, 0.0f,
-
-     0.5f,  0.5f, -0.2f,   0.0f, 0.0f, 0.0f,
-     0.0f, -0.5f, -0.2f,   0.0f, 0.0f, 0.0f,
-     0.5f,  0.5f,  0.2f,   0.0f, 0.0f, 0.0f,
-
-    -0.5f,  0.5f,  0.2f,   0.0f, 0.0f, 0.0f,
-     0.0f, -0.5f,  0.2f,   0.0f, 0.0f, 0.0f,
-     0.0f, -0.5f, -0.2f,   0.0f, 0.0f, 0.0f,
-
-    -0.5f,  0.5f, -0.2f,   0.0f, 0.0f, 0.0f,
-     0.0f, -0.5f, -0.2f,   0.0f, 0.0f, 0.0f,
-    -0.5f,  0.5f,  0.2f,   0.0f, 0.0f, 0.0f,
-  };
-
-  unsigned int VAO;
-  glGenVertexArrays(1, &VAO);
-  glBindVertexArray(VAO);
-
-  unsigned int VBO;
-  glGenBuffers(1, &VBO);
-  glBindBuffer(GL_ARRAY_BUFFER, VBO);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-  // position attributes
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
-  glEnableVertexAttribArray(0);
-
-  // color attributes
-  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
-  glEnableVertexAttribArray(1);
-
   // Create Shader
   Shader myShader("vertexshader.vs", "fragmentshader.fs");
+
+  // Create Model
+  Model myModel("res/nanosuit/nanosuit.obj");
 
   // Enable depth
   glEnable(GL_DEPTH_TEST);
@@ -137,13 +88,13 @@ int main() {
     glm::mat4 model = glm::mat4(1.0f);
     glm::mat4 view = cam.getView();
 
-    model = glm::rotate(model, (float)glfwGetTime()*2.5f, glm::vec3(0.0f, 1.0f, 0.0f));
-    glUniformMatrix4fv(glGetUniformLocation(myShader.progID, "model"), 1, GL_FALSE, glm::value_ptr(model));
+    model = glm::translate(model, glm::vec3(0.0, -1.75f, 0.0f));
+    model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));
+    myShader.setUniform("model", model);
     myShader.setUniform("view", view);
+    
 
-    // render container
-    glBindVertexArray(VAO);
-    glDrawArrays(GL_TRIANGLES, 0, 24);
+    myModel.draw(myShader);
 
     glfwSwapBuffers(window);
     glfwPollEvents();

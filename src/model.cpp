@@ -102,7 +102,6 @@ Mesh Model::processMesh(aiMesh* mesh) {
 
 // load the textures
 std::vector<Texture> Model::loadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName) {
-  std::cout << "Test" << std::endl;
   std::vector<Texture> textures;
   // check if there is a texture which is already loaded
   for (unsigned int i = 0; i < mat->GetTextureCount(type); i++) {

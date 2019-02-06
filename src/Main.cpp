@@ -10,6 +10,7 @@
 #include <assimp/Importer.hpp>
 #include <stb_image/stb_image_write.h>;
 #include <tinyfiledialogs.h>
+#include <algorithm>
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
@@ -132,8 +133,11 @@ void shortcut_callback(GLFWwindow* window, int key, int scancode, int action, in
   // export current frame as png
   if (key == GLFW_KEY_E && action == GLFW_PRESS) {
     const char* filterPatterns[1] = { "*.png" };
-    std::string filename = tinyfd_saveFileDialog("Choose a location", "open-model-viewer.png", 1, filterPatterns, NULL);
-    exportImage(filename);
+    const char* filename = tinyfd_saveFileDialog("Choose a location", "open-model-viewer.png", 1, filterPatterns, NULL);
+    if (filename != nullptr)
+      exportImage(filename);
+    else
+      std::cout << "Please enter a valid file name!" << std::endl;
   }
 }
 

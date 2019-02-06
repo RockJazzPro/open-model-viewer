@@ -10,7 +10,6 @@
 class Model {
 public:
   Model(const std::string &path);
-  void changeModel(const std::string &path);
   void draw(Shader &shader);
 private:
   std::vector<Texture> textures_loaded;

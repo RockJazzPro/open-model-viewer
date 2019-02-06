@@ -15,6 +15,7 @@
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void shortcut_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
+void drop_callback(GLFWwindow* window, int count, const char** paths);
 void processMovement(GLFWwindow * window);
 void exportImage(const std::string &name);
 
@@ -56,6 +57,9 @@ int main() {
 
   // set key callback
   glfwSetKeyCallback(window, shortcut_callback);
+
+  // set drop callback
+  glfwSetDropCallback(window, drop_callback);
 
   // load all OpenGL functions
   if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
@@ -162,6 +166,16 @@ void processMovement(GLFWwindow *window) {
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
   glViewport(0, 0, width, height);
+}
+
+void drop_callback(GLFWwindow* window, int count, const char** paths) {
+  // check dragged files
+  if (paths[count - 1] != nullptr) {
+    std::string newfile = paths[count-1];
+    std::replace(newfile.begin(), newfile.end(), '\\', '/');
+    delete mainModel;
+    mainModel = new Model(newfile);
+  }
 }
 
 void mouse_callback(GLFWwindow* window, double xpos, double ypos) {

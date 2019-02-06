@@ -14,6 +14,10 @@ void Model::draw(Shader &shader) {
     meshes[i].draw(shader);
 }
 
+void Model::changeModel(const std::string &path) {
+  loadModel(path);
+}
+
 void Model::loadModel(const std::string &path) {
   Assimp::Importer importer;
   // create scene

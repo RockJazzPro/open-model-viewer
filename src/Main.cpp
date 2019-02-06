@@ -31,6 +31,8 @@ float lastFrame = 0.0f;
 
 bool wireframeMode = false;
 
+Model* mainModel;
+
 int main() {
   // initialization and configuration of glfw
   glfwInit();
@@ -68,7 +70,7 @@ int main() {
   Shader myShader("vertexshader.vs", "fragmentshader.fs");
 
   // Create Model
-  Model myModel("res/nanosuit/nanosuit.obj");
+  mainModel = new Model("res/nanosuit/nanosuit.obj");
 
   // Enable depth
   glEnable(GL_DEPTH_TEST);
@@ -97,14 +99,11 @@ int main() {
     // create transformations
     glm::mat4 model = glm::mat4(1.0f);
     glm::mat4 view = cam.getView();
-
-    model = glm::translate(model, glm::vec3(0.0, -1.75f, 0.0f));
-    model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));
     myShader.setUniform("model", model);
     myShader.setUniform("view", view);
     
 
-    myModel.draw(myShader);
+    mainModel->draw(myShader);
 
     glfwSwapBuffers(window);
     glfwPollEvents();
@@ -127,7 +126,16 @@ void shortcut_callback(GLFWwindow* window, int key, int scancode, int action, in
 
   // import new object if ctrl + i is pressed
   if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS && glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS && action == GLFW_PRESS) {
-    
+    const char* filterPatterns[1] = { "*.obj" };
+    const char* filename = tinyfd_openFileDialog("Choose the model file you want to load", "", 1, filterPatterns, NULL, 0);
+    if (filename != nullptr) {
+      std::string newfile = filename;
+      std::replace(newfile.begin(), newfile.end(), '\\', '/');
+      delete mainModel;
+      mainModel = new Model(newfile);
+    }
+    else
+      std::cout << "Please enter a valid obj file!" << std::endl;
   }
 
   // export current frame as png

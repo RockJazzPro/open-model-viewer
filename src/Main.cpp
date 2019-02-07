@@ -19,8 +19,8 @@ void drop_callback(GLFWwindow* window, int count, const char** paths);
 void processMovement(GLFWwindow * window);
 void exportImage(const std::string &name);
 
-const unsigned int WIDTH = 1000;
-const unsigned int HEIGHT = 700;
+unsigned int WIDTH = 1000;
+unsigned int HEIGHT = 700;
 
 Camera cam(0.0f, 0.0f, 3.0f, -90.0f, 0.0f, 5.0f, 0.05f);
 float lastX = WIDTH / 2;
@@ -79,11 +79,6 @@ int main() {
   // Enable depth
   glEnable(GL_DEPTH_TEST);
 
-  // Set projection matrix
-  myShader.use();
-  glm::mat4 projection = glm::mat4(1.0f);
-  projection = glm::perspective(glm::radians(45.0f), (float)WIDTH / (float)HEIGHT, 0.1f, 100.0f);
-  myShader.setUniform("projection", projection);
 
   // render
   while (!glfwWindowShouldClose(window)) {
@@ -97,8 +92,12 @@ int main() {
     // Background
     glClearColor(.1f, .1, .1f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    
+
+    // Set projection matrix
     myShader.use();
+    glm::mat4 projection = glm::mat4(1.0f);
+    projection = glm::perspective(glm::radians(45.0f), (float)WIDTH / (float)HEIGHT, 0.1f, 100.0f);
+    myShader.setUniform("projection", projection);
 
     // create transformations
     glm::mat4 model = glm::mat4(1.0f);
@@ -166,6 +165,8 @@ void processMovement(GLFWwindow *window) {
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
   glViewport(0, 0, width, height);
+  WIDTH = width;
+  HEIGHT = height;
 }
 
 void drop_callback(GLFWwindow* window, int count, const char** paths) {

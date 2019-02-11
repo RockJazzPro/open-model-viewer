@@ -93,15 +93,18 @@ void Shader::setUniform(const std::string &name, glm::vec2 &vec) {
 }
 
 void Shader::setUniform(const std::string &name, glm::mat4 &mat) {
-  glUniformMatrix4fv(glGetUniformLocation(progID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
+  glUniformMatrix4fv(glGetUniformLocation(progID, name.c_str()), 1,
+                                          GL_FALSE, &mat[0][0]);
 }
 
 void Shader::setUniform(const std::string &name, glm::mat3 &mat) {
-  glUniformMatrix3fv(glGetUniformLocation(progID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
+  glUniformMatrix3fv(glGetUniformLocation(progID, name.c_str()), 1,
+                                          GL_FALSE, &mat[0][0]);
 }
 
 void Shader::setUniform(const std::string &name, glm::mat2 &mat) {
-  glUniformMatrix2fv(glGetUniformLocation(progID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
+  glUniformMatrix2fv(glGetUniformLocation(progID, name.c_str()), 1,
+                                          GL_FALSE, &mat[0][0]);
 }
 
 // check if there is a compile error
@@ -112,14 +115,16 @@ void Shader::checkCompileErrors(GLuint id, std::string type) {
     glGetShaderiv(id, GL_COMPILE_STATUS, &success);
     if (!success) {
       glGetShaderInfoLog(id, 1024, NULL, infoLog);
-      std::cout << "shader compilation error of type: " << type << "\n" << infoLog << std::endl;
+      std::cout << "shader compilation error of type: " << type << "\n"
+                << infoLog << std::endl;
     }
   }
   else {
     glGetProgramiv(id, GL_COMPILE_STATUS, &success);
     if (!success) {
       glGetShaderInfoLog(id, 1024, NULL, infoLog);
-      std::cout << "program linking error of type: " << type << "\n" << infoLog << std::endl;
+      std::cout << "program linking error of type: " << type << "\n"
+                << infoLog << std::endl;
     }
   }
 }

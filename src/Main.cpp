@@ -14,7 +14,8 @@
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
-void shortcut_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
+void shortcut_callback(GLFWwindow* window, int key, int scancode, int action,
+                       int mods);
 void drop_callback(GLFWwindow* window, int count, const char** paths);
 void processMovement(GLFWwindow * window);
 void exportImage(const std::string &name);
@@ -42,7 +43,8 @@ int main() {
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
   // Create window
-  GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "open-model-viewer", NULL, NULL);
+  GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "open-model-viewer",
+      NULL, NULL);
   if (window == NULL) {
     std::cout << "Failed to create window" << std::endl;
     glfwTerminate();
@@ -79,7 +81,6 @@ int main() {
   // Enable depth
   glEnable(GL_DEPTH_TEST);
 
-
   // render
   while (!glfwWindowShouldClose(window)) {
     processMovement(window);
@@ -96,7 +97,9 @@ int main() {
     // Set projection matrix
     myShader.use();
     glm::mat4 projection = glm::mat4(1.0f);
-    projection = glm::perspective(glm::radians(45.0f), (float)WIDTH / (float)HEIGHT, 0.1f, 100.0f);
+    projection = glm::perspective(glm::radians(45.0f),
+        (float)WIDTH / (float)HEIGHT, // aspect ratio
+        0.1f, 100.0f);
     myShader.setUniform("projection", projection);
 
     // create transformations
@@ -116,7 +119,8 @@ int main() {
   return 0;
 }
 
-void shortcut_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+void shortcut_callback(GLFWwindow* window, int key, int scancode, int action,
+                       int mods) {
   // exit application if escape is pressed
   if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
     glfwSetWindowShouldClose(window, true);
@@ -128,9 +132,13 @@ void shortcut_callback(GLFWwindow* window, int key, int scancode, int action, in
   }
 
   // import new object if ctrl + i is pressed
-  if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS && glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS && action == GLFW_PRESS) {
+  if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS &&
+      glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS &&
+      action == GLFW_PRESS) {
     const char* filterPatterns[1] = { "*.obj" };
-    const char* filename = tinyfd_openFileDialog("Choose the model file you want to load", "", 1, filterPatterns, NULL, 0);
+    const char* filename = tinyfd_openFileDialog(
+        "Choose the model file you want to load",
+        "", 1, filterPatterns, NULL, 0);
     if (filename != nullptr) {
       std::string newfile = filename;
       std::replace(newfile.begin(), newfile.end(), '\\', '/');
@@ -144,7 +152,8 @@ void shortcut_callback(GLFWwindow* window, int key, int scancode, int action, in
   // export current frame as png
   if (key == GLFW_KEY_E && action == GLFW_PRESS) {
     const char* filterPatterns[1] = { "*.png" };
-    const char* filename = tinyfd_saveFileDialog("Choose a location", "open-model-viewer.png", 1, filterPatterns, NULL);
+    const char* filename = tinyfd_saveFileDialog("Choose a location",
+        "open-model-viewer.png", 1, filterPatterns, NULL);
     if (filename != nullptr)
       exportImage(filename);
     else

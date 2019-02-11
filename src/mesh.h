@@ -23,7 +23,8 @@ public:
   std::vector<unsigned int> indices;
   std::vector<Texture> textures;
 
-  Mesh(std::vector<Vertex> &vertices, std::vector<unsigned int> &indices, std::vector<Texture> &texture);
+  Mesh(std::vector<Vertex> &vertices, std::vector<unsigned int> &indices,
+       std::vector<Texture> &texture);
   void draw(Shader &shader);
 private:
   unsigned int VAO;

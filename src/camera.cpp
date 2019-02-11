@@ -1,8 +1,10 @@
 #include "camera.h"
 
 // create Camera
-Camera::Camera(float posX, float posY, float posZ, float yaw, float pitch, float speed, float sensitivity)
-: yaw(yaw), pitch(pitch), speed(speed), sensitivity(sensitivity), front(glm::vec3(0.0f, 0.0f, -1.0f)){
+Camera::Camera(float posX, float posY, float posZ, float yaw, float pitch,
+               float speed, float sensitivity)
+    : yaw(yaw), pitch(pitch), speed(speed), sensitivity(sensitivity),
+      front(glm::vec3(0.0f, 0.0f, -1.0f)){
   position = glm::vec3(posX, posY, posZ);
   worldUp = glm::vec3(0.0f, 1.0f, 0.0f);
   up = worldUp;
